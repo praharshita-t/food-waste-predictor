@@ -35,6 +35,30 @@ header p {
     opacity: 0.9;
 }
 
+/* AI Status */
+.ai-status {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    display: inline-block;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.ai-status .ai-active {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.ai-status .ai-inactive {
+    color: #ff9800;
+}
+
+.ai-status .ai-error {
+    color: #f44336;
+}
+
 /* Card */
 .card {
     background: white;
@@ -157,6 +181,71 @@ input:focus, select:focus {
     background: #f5f5f5;
     border-radius: 8px;
     margin-bottom: 15px;
+}
+
+/* AI Insights */
+.ai-insights {
+    padding: 15px;
+    background: #e3f2fd;
+    border-radius: 8px;
+    margin-top: 15px;
+    border-left: 4px solid #2196F3;
+}
+
+.ai-insights ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+}
+
+.ai-insights li {
+    padding: 8px 0;
+    padding-left: 25px;
+    position: relative;
+    color: #333;
+    line-height: 1.6;
+}
+
+.ai-insights li:before {
+    content: "💡";
+    position: absolute;
+    left: 0;
+}
+
+/* Info Card */
+.info-card {
+    background: #f9f9f9;
+    border: 2px solid #e0e0e0;
+}
+
+.info-card h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.info-card p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.info-card code {
+    background: #e0e0e0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.info-card a {
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.info-card a:hover {
+    text-decoration: underline;
 }
 
 .value {

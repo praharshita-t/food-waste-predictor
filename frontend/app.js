@@ -4,6 +4,14 @@ const resultsDiv = document.getElementById('results');
 const wasteLevelSpan = document.getElementById('wasteLevel');
 const wasteAmountP = document.getElementById('wasteAmount');
 const suggestionP = document.getElementById('suggestion');
+const aiInsightsDiv = document.getElementById('aiInsights');
+const aiInsightsList = document.getElementById('aiInsightsList');
+const aiStatusText = document.getElementById('aiStatusText');
+const aiSetupStatus = document.getElementById('aiSetupStatus');
+const aiSetupInstructions = document.getElementById('aiSetupInstructions');
+
+// Check AI status on page load
+checkAIStatus();
 
 // Handle form submission
 form.addEventListener('submit', async function(e) {
@@ -28,19 +36,20 @@ form.addEventListener('submit', async function(e) {
     submitBtn.disabled = true;
     
     try {
-        // TODO: Replace with your actual backend URL
-        // const response = await fetch('http://localhost:5000/predict', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(data)
-        // });
+        // Call backend API
+        const response = await fetch('http://localhost:5000/api/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
         
-        // const result = await response.json();
+        if (!response.ok) {
+            throw new Error(`Backend error: ${response.status}`);
+        }
         
-        // TEMPORARY: Mock prediction (remove when backend is ready)
-        const result = mockPrediction(attendance, menuType, foodQuantity);
+        const result = await response.json();
         
         // Display results
         displayResults(result);
@@ -67,6 +76,25 @@ function displayResults(result) {
     // Update suggestion
     suggestionP.textContent = result.suggestion;
     
+    // Show/hide AI insights if available
+    if (result.ai_enhanced && result.ai_insights && result.ai_insights.length > 0) {
+        aiInsightsList.innerHTML = '';
+        result.ai_insights.forEach(tip => {
+            const li = document.createElement('li');
+            li.textContent = tip;
+            aiInsightsList.appendChild(li);
+        });
+        aiInsightsDiv.style.display = 'block';
+    } else {
+        aiInsightsDiv.style.display = 'none';
+    }
+    
+    // Update AI status indicator
+    if (result.ai_enhanced) {
+        aiStatusText.textContent = '🤖 AI-Enhanced (Google Gemini Active)';
+        aiStatusText.className = 'ai-active';
+    }
+    
     // Show results card
     resultsDiv.style.display = 'block';
     
@@ -74,51 +102,47 @@ function displayResults(result) {
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
-// TEMPORARY: Mock prediction function (for testing without backend)
-// TODO: Remove this when backend is ready
-function mockPrediction(attendance, menuType, foodQuantity) {
-    // Simple calculation
-    let perPersonConsumption;
-    switch(menuType) {
-        case 'special':
-            perPersonConsumption = 0.4;
-            break;
-        case 'nonveg':
-            perPersonConsumption = 0.35;
-            break;
-        case 'veg':
-        default:
-            perPersonConsumption = 0.3;
+// Check AI status from backend
+async function checkAIStatus() {
+    try {
+        // Make a test prediction to check AI status
+        const testResponse = await fetch('http://localhost:5000/api/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                attendance: 100,
+                menu_type: 'veg',
+                food_quantity: 30
+            })
+        });
+        
+        if (testResponse.ok) {
+            const testResult = await testResponse.json();
+            
+            if (testResult.ai_enhanced) {
+                aiStatusText.textContent = '🤖 AI-Enhanced (Google Gemini Active)';
+                aiStatusText.className = 'ai-active';
+                aiSetupStatus.textContent = '✅ Enabled';
+                aiSetupStatus.style.color = '#4CAF50';
+            } else {
+                aiStatusText.textContent = '⚙️ Standard Mode (AI Not Configured)';
+                aiStatusText.className = 'ai-inactive';
+                aiSetupStatus.textContent = '❌ Not Configured';
+                aiSetupStatus.style.color = '#f44336';
+                aiSetupInstructions.style.display = 'block';
+            }
+        }
+    } catch (error) {
+        console.error('Error checking AI status:', error);
+        aiStatusText.textContent = '⚠️ Unable to check AI status';
+        aiStatusText.className = 'ai-error';
+        aiSetupStatus.textContent = '❓ Unknown';
     }
-    
-    const expectedConsumption = attendance * perPersonConsumption;
-    const wasteKg = Math.max(0, foodQuantity - expectedConsumption);
-    const wastePercentage = ((wasteKg / foodQuantity) * 100).toFixed(1);
-    
-    // Determine waste level
-    let level = 'low';
-    let suggestion = '';
-    
-    if (wastePercentage > 20) {
-        level = 'high';
-        suggestion = `⚠️ High waste predicted! Consider reducing preparation by ${wastePercentage}%. Prepare around ${expectedConsumption.toFixed(1)} kg instead.`;
-    } else if (wastePercentage > 10) {
-        level = 'medium';
-        suggestion = '⚡ Moderate waste expected. Monitor portions during service and adjust if needed.';
-    } else {
-        level = 'low';
-        suggestion = '✅ Excellent planning! Waste level is minimal. Continue with current preparation strategy.';
-    }
-    
-    return {
-        waste_level: level,
-        waste_kg: wasteKg.toFixed(2),
-        waste_percentage: wastePercentage,
-        suggestion: suggestion
-    };
 }
 
-// When backend is ready, the response format should be:
+// Backend response format:
 /*
 {
     "waste_level": "low" | "medium" | "high",

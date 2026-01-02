@@ -11,9 +11,6 @@
         <header>
             <h1>🍽️ Food Waste Predictor</h1>
             <p>Smart predictions for canteen management</p>
-            <div id="aiStatus" class="ai-status">
-                <span id="aiStatusText">🤖 Checking AI status...</span>
-            </div>
         </header>
 
         <div class="card">
@@ -73,25 +70,8 @@
                 <p id="suggestion" class="value">-</p>
             </div>
 
-            <!-- AI Insights Section -->
-            <div id="aiInsights" class="ai-insights" style="display: none;">
-                <p class="label">🤖 AI-Powered Tips:</p>
-                <ul id="aiInsightsList"></ul>
-            </div>
         </div>
 
-        <!-- Info Card about Gemini AI -->
-        <div class="card info-card">
-            <h3>🤖 About Google Gemini AI</h3>
-            <p>This application uses <strong>Google Gemini AI</strong> to provide intelligent, contextual suggestions for food waste reduction.</p>
-            <div id="aiSetupInfo">
-                <p><strong>Status:</strong> <span id="aiSetupStatus">Checking...</span></p>
-                <p id="aiSetupInstructions" style="display: none;">
-                    <strong>To enable AI:</strong> Set <code>GOOGLE_GEMINI_API_KEY</code> environment variable. 
-                    See <a href="GEMINI_SETUP.md" target="_blank">GEMINI_SETUP.md</a> for instructions.
-                </p>
-            </div>
-        </div>
     </div>
 
     <script src="app.js"></script>

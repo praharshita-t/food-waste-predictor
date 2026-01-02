@@ -1,29 +1,101 @@
 # Food Waste Predictor 🍽️
 
-A web application that predicts food waste in canteens and hostels based on expected attendance, menu type, and food quantity. Enhanced with **Google Gemini AI** for intelligent, contextual suggestions.
+A web application that predicts food waste in canteens and hostels based on expected attendance, menu type, and food quantity.
+
+## ⚡ Quick Start (Just Cloned?)
+
+```bash
+# 1. Install dependencies
+cd backend
+npm install
+
+# 2. Start backend (Terminal 1)
+npm start
+
+# 3. Start frontend (Terminal 2)
+cd ../frontend
+node server.js
+
+# 4. Open http://localhost:8000 in your browser
+```
+
+**Or use the run script:** Double-click `run.bat` (Windows) or run `.\run.ps1` (PowerShell)
+
+**That's it!** No API keys, no configuration needed. Just install and run.
+
+---
+
+## 🚀 Getting Started (Detailed Instructions)
+
+### Prerequisites
+
+Before you begin, make sure you have:
+- **Node.js** (v14 or higher) - [Download here](https://nodejs.org/)
+- **npm** (comes with Node.js)
+
+### Step 1: Clone the Repository
+
+```bash
+git clone <repository-url>
+cd food-waste-predictor
+```
+
+### Step 2: Install Dependencies
+
+```bash
+cd backend
+npm install
+```
+
+This will install all required packages (Express, CORS, etc.)
+
+### Step 3: Start the Application
+
+**Option A: Use the Run Script (Easiest - Windows)**
+
+Double-click `run.bat` in the project root, or run:
+```bash
+.\run.bat
+```
+
+**Option B: Manual Start**
+
+1. **Start Backend Server** (Terminal 1):
+   ```bash
+   cd backend
+   npm start
+   ```
+   You should see: `🚀 Server running on http://localhost:5000`
+
+2. **Start Frontend Server** (Terminal 2):
+   ```bash
+   cd frontend
+   node server.js
+   ```
+   You should see: `🚀 Frontend server running at http://localhost:8000/`
+
+3. **Open in Browser:**
+   Go to: `http://localhost:8000`
+
+### Step 4: Test It!
+
+1. Enter attendance: `150`
+2. Select menu type: `Vegetarian`
+3. Enter food quantity: `50` kg
+4. Click **Get Prediction**
+
+You should see the prediction results! 🎉
+
+**That's it!** No API keys, no external services, no complex setup needed.
 
 ## 🏗️ Architecture
 
 The application consists of three main components:
 
 1. **Frontend** - User interface built with HTML, CSS, and JavaScript
-2. **Backend** - Node.js/Express API server with **Google Gemini AI** integration
+2. **Backend** - Node.js/Express API server
 3. **ML Model** - Python-based prediction logic (can be integrated later)
 
-## 🤖 Google AI Technologies
-
-### ✅ Google Gemini AI (Integrated)
-- **Purpose**: Generate intelligent, contextual suggestions for food waste reduction
-- **Status**: Fully integrated and optional
-- **Setup**: See [GEMINI_SETUP.md](GEMINI_SETUP.md) for configuration
-- **Benefits**: 
-  - AI-powered, personalized recommendations
-  - Context-aware suggestions based on prediction data
-  - Additional actionable tips for waste reduction
-
-### 🔄 Google Sheets API (Prepared)
-- **Purpose**: Data persistence and historical data storage
-- **Status**: Infrastructure ready, implementation pending
 
 ## 📁 Project Structure
 
@@ -46,48 +118,28 @@ food-waste-predictor/
 └── README.md
 ```
 
-## 🚀 Quick Start
+## 📋 Quick Reference
 
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm (comes with Node.js)
-
-### Step 1: Install Backend Dependencies
-
+**Install dependencies:**
 ```bash
-cd backend
-npm install
+cd backend && npm install
 ```
 
-### Step 2: Start the Backend Server
-
+**Start backend:**
 ```bash
-npm start
+cd backend && npm start
 ```
 
-The backend will run on `http://localhost:5000`
-
-### Step 3: Open the Frontend
-
-Open `frontend/index.html` in your web browser, or use a local server:
-
-**Option A: Using Python (if installed)**
+**Start frontend:**
 ```bash
-cd frontend
-python -m http.server 8000
-```
-Then open `http://localhost:8000` in your browser.
-
-**Option B: Using Node.js http-server**
-```bash
-npm install -g http-server
-cd frontend
-http-server -p 8000
+cd frontend && node server.js
 ```
 
-**Option C: Direct file open**
-Simply double-click `frontend/index.html` (may have CORS issues with fetch API)
+**Or use the run script:**
+```bash
+.\run.bat  # Windows
+.\run.ps1  # PowerShell
+```
 
 ## 🎯 How to Use
 
@@ -154,31 +206,43 @@ npm run dev  # Uses nodemon for auto-reload
 - **routes/foodRoutes.js** - API endpoint definitions
 - **services/dataProcessor.js** - Input validation
 - **services/predictionService.js** - Prediction logic
-- **services/geminiService.js** - Google Gemini AI integration ✨
 - **services/sheetsService.js** - Google Sheets integration (optional)
 - **config/googleSheetsAuth.js** - Google Sheets auth (optional)
 
 ## 📝 Notes
 
-- **Google Gemini AI**: Optional but recommended for enhanced suggestions. See [GEMINI_SETUP.md](GEMINI_SETUP.md)
 - The ML model (`ml-model/`) contains Python code that can be integrated later
-- Google Sheets integration is prepared but not required for basic functionality
 - The backend uses historical data embedded in the code (can be moved to a database)
-- **Works without API keys**: The application functions perfectly without Google services, but AI enhancement provides better recommendations
+- **No external dependencies required**: The application runs immediately after installing npm packages
 
 ## 🐛 Troubleshooting
+
+**"npm is not recognized" or "node is not recognized"**
+- Install Node.js from [nodejs.org](https://nodejs.org/)
+- Restart your terminal after installation
+
+**"Cannot find module" errors**
+- Make sure you ran `npm install` in the `backend` folder
+- Delete `node_modules` folder and `package-lock.json`, then run `npm install` again
 
 **Backend won't start:**
 - Make sure port 5000 is not in use
 - Check that all dependencies are installed: `npm install`
+- Look for error messages in the terminal
 
-**Frontend can't connect to backend:**
+**Frontend shows "Failed to get prediction":**
 - Ensure backend is running on `http://localhost:5000`
-- Check browser console for CORS errors
-- If opening HTML directly, use a local server instead
+- Check that you see the backend server message: `🚀 Server running on http://localhost:5000`
+- Open browser console (F12) to see detailed error messages
 
-**CORS errors:**
-- Backend has CORS enabled, but if issues persist, check the CORS configuration in `server.js`
+**Port already in use:**
+- Close other applications using ports 5000 or 8000
+- Or change the PORT in `backend/server.js` (line 6) and `frontend/server.js` (line 6)
+
+**Still having issues?**
+- Make sure both servers are running (backend on port 5000, frontend on port 8000)
+- Check that you're opening `http://localhost:8000` (not 5000)
+- Verify Node.js version: `node --version` (should be v14 or higher)
 
 ## 📄 License
 

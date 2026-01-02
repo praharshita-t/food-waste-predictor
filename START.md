@@ -1,15 +1,17 @@
 # Quick Start Guide 🚀
 
-## Step 1: Install Backend Dependencies
+## For First-Time Setup
 
-Open a terminal in the project root and run:
+### Step 1: Install Dependencies
+
+If you just cloned the repo, install dependencies first:
 
 ```bash
 cd backend
 npm install
 ```
 
-## Step 2: Start the Backend
+### Step 2: Start the Backend
 
 Keep the terminal open and run:
 
@@ -23,43 +25,49 @@ You should see:
 📡 API available at http://localhost:5000/api
 ```
 
-## Step 3: Open the Frontend
-
-### Option A: Using a Local Server (Recommended)
+### Step 3: Start the Frontend
 
 Open a **new terminal** and run:
 
-**Using Python:**
 ```bash
 cd frontend
-python -m http.server 8000
+node server.js
 ```
 
-**Using Node.js http-server:**
-```bash
-npm install -g http-server
-cd frontend
-http-server -p 8000
+You should see:
+```
+🚀 Frontend server running at http://localhost:8000/
 ```
 
-Then open `http://localhost:8000` in your browser.
+### Step 4: Open in Browser
 
-### Option B: Direct File Open
+Go to: **http://localhost:8000**
 
-Simply open `frontend/index.html` in your browser (may have CORS limitations).
-
-## Step 4: Test the Application
+### Step 5: Test the Application
 
 1. Enter attendance: `150`
 2. Select menu type: `Vegetarian`
 3. Enter food quantity: `50` kg
 4. Click "Get Prediction"
 
-You should see the prediction results!
+You should see the prediction results! 🎉
+
+## Quick Run (After First Setup)
+
+**Windows:**
+- Double-click `run.bat`
+
+**PowerShell:**
+```bash
+.\run.ps1
+```
+
+This starts both servers automatically!
 
 ## Troubleshooting
 
 - **Backend won't start?** Make sure port 5000 is free
 - **Frontend can't connect?** Ensure backend is running first
-- **CORS errors?** Use a local server (Option A) instead of opening HTML directly
+- **"npm is not recognized"?** Install Node.js from [nodejs.org](https://nodejs.org/)
+- **"Cannot find module"?** Run `npm install` in the `backend` folder
 

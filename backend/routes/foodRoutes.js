@@ -22,7 +22,7 @@ const dataProcessor = require('../services/dataProcessor');
  *   "suggestion": "Your suggestion text here"
  * }
  */
-router.post('/predict', async (req, res) => {
+router.post('/predict', (req, res) => {
     try {
         // Get raw input from request
         const rawInput = req.body;
@@ -31,7 +31,7 @@ router.post('/predict', async (req, res) => {
         const processedInput = dataProcessor.processInput(rawInput);
         
         // Get prediction from service
-        const prediction = await predictionService.predict(processedInput);
+        const prediction = predictionService.predict(processedInput);
         
         // Send response
         res.json(prediction);

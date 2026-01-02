@@ -5,9 +5,6 @@
  * This file answers: "Given input, what is the waste prediction?"
  */
 
-const fs = require('fs');
-const path = require('path');
-const geminiService = require('./geminiService');
 
 // Historical data (based on sample_data.csv)
 // In production, this could be loaded from a database or Google Sheets
@@ -109,7 +106,7 @@ function generateSuggestion(wasteLevel, wasteKg, wastePercentage, foodQuantity, 
  * @param {Object} input - Processed input { attendance, menu_type, food_quantity }
  * @returns {Object} - Prediction result
  */
-async function predict(input) {
+function predict(input) {
     const { attendance, menu_type, food_quantity } = input;
     
     // Predict waste level
@@ -118,50 +115,8 @@ async function predict(input) {
     // Calculate waste amounts
     const { wasteKg, wastePercentage } = calculateWaste(food_quantity, attendance, wasteLevel);
     
-    // Prepare prediction data for AI
-    const predictionData = {
-        wasteLevel,
-        wasteKg: parseFloat(wasteKg),
-        wastePercentage: parseFloat(wastePercentage),
-        attendance,
-        menuType: menu_type,
-        foodQuantity: food_quantity
-    };
-    
-    // Try to generate AI-powered suggestion using Google Gemini
-    let suggestion = null;
-    let aiInsights = null;
-    let aiWasUsed = false;
-    
-    if (geminiService.isAvailable()) {
-        try {
-            // Get AI-generated suggestion
-            suggestion = await geminiService.generateAISuggestion(predictionData);
-            
-            if (suggestion) {
-                aiWasUsed = true;
-                console.log('✅ AI suggestion generated successfully');
-            } else {
-                console.log('⚠️ AI suggestion returned null, using default');
-            }
-            
-            // Get additional AI insights
-            aiInsights = await geminiService.generateAIInsights(predictionData);
-            if (aiInsights && aiInsights.tips && aiInsights.tips.length > 0) {
-                console.log(`✅ AI insights generated: ${aiInsights.tips.length} tips`);
-            } else {
-                console.log('⚠️ AI insights not generated or empty');
-            }
-        } catch (error) {
-            console.error('❌ AI suggestion generation failed:', error.message);
-            console.error('Stack:', error.stack);
-        }
-    }
-    
-    // Fall back to default suggestion if AI is not available or failed
-    if (!suggestion) {
-        suggestion = generateSuggestion(wasteLevel, wasteKg, wastePercentage, food_quantity, attendance);
-    }
+    // Generate suggestion using default rule-based approach
+    const suggestion = generateSuggestion(wasteLevel, wasteKg, wastePercentage, food_quantity, attendance);
     
     // Build response
     const response = {
@@ -170,14 +125,6 @@ async function predict(input) {
         waste_percentage: wastePercentage,
         suggestion: suggestion
     };
-    
-    // Add AI insights if available
-    if (aiInsights && aiInsights.tips && aiInsights.tips.length > 0) {
-        response.ai_insights = aiInsights.tips;
-    }
-    
-    // Indicate if AI was actually used (not just available)
-    response.ai_enhanced = aiWasUsed;
     
     return response;
 }

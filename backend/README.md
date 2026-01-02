@@ -10,7 +10,7 @@ The backend follows a three-layer architecture:
 
 1. **Server Layer** (`server.js`) - Receives HTTP requests
 2. **Routes & Services Layer** - Processes data and business logic
-3. **External Services Layer** - ML predictions, Google Gemini AI, and Google Sheets integration
+3. **External Services Layer** - ML predictions and optional Google Sheets integration
 
 ## API Endpoints
 
@@ -46,9 +46,7 @@ Predicts food waste based on input parameters.
 - `waste_level` - Predicted waste level (low/medium/high)
 - `waste_kg` - Estimated waste in kilograms
 - `waste_percentage` - Waste as percentage of prepared food
-- `suggestion` - Actionable suggestion (AI-enhanced if Gemini API key is set)
-- `ai_enhanced` - Boolean indicating if AI was used
-- `ai_insights` - Additional AI-generated tips (only if Gemini is enabled)
+- `suggestion` - Actionable suggestion based on prediction data
 
 **Menu Types:**
 - `veg` - Vegetarian
@@ -70,7 +68,6 @@ backend/
 ├── services/
 │   ├── dataProcessor.js     # Input validation and cleaning
 │   ├── predictionService.js # Prediction logic
-│   ├── geminiService.js     # Google Gemini AI integration
 │   └── sheetsService.js     # Google Sheets integration (optional)
 ├── config/
 │   └── googleSheetsAuth.js  # Google Sheets authentication
@@ -101,23 +98,7 @@ The server will run on `http://localhost:5000` by default.
 
 Optional environment variables:
 - `PORT` - Server port (default: 5000)
-- `GOOGLE_GEMINI_API_KEY` - Google Gemini API key for AI-enhanced suggestions (optional)
 - `GOOGLE_SHEETS_ID` - Google Sheets spreadsheet ID (for future use)
-
-### Setting up Google Gemini AI
-
-1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Set it as an environment variable:
-   ```bash
-   # Windows PowerShell
-   $env:GOOGLE_GEMINI_API_KEY="your-api-key-here"
-   
-   # Linux/Mac
-   export GOOGLE_GEMINI_API_KEY="your-api-key-here"
-   ```
-3. Restart the server
-
-**Note:** If the API key is not set, the system will automatically fall back to default rule-based suggestions. The application works perfectly without it, but AI enhancement provides more intelligent, contextual recommendations.
 
 ## How It Works
 
@@ -136,26 +117,7 @@ The prediction service uses historical data matching:
 - Calculates waste amount and percentage
 - Generates actionable suggestions
 
-### AI Enhancement (Google Gemini)
-
-When `GOOGLE_GEMINI_API_KEY` is set, the system uses Google's Gemini AI to:
-- Generate intelligent, contextual suggestions based on prediction data
-- Provide additional actionable tips for waste reduction
-- Create personalized recommendations for different menu types and attendance levels
-
-The AI enhancement is optional - if the API key is not available, the system automatically uses rule-based suggestions.
-
-## Google AI Technologies Used
-
-### ✅ Google Gemini AI
-- **Purpose**: Generate intelligent, contextual suggestions for food waste reduction
-- **Integration**: `backend/services/geminiService.js`
-- **Model**: `gemini-pro`
-- **Features**:
-  - AI-powered suggestion generation
-  - Additional insights and tips
-  - Context-aware recommendations
-- **Status**: Fully integrated (optional - works without API key)
+## Google Technologies Used
 
 ### 🔄 Google Sheets API
 - **Purpose**: Data persistence and historical data storage
